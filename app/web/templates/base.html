@@ -3,72 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Management System</title>
+    <title>School Management | Premium Dashboard</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .sidebar { min-height: calc(100vh - 56px); background-color: #343a40; }
-        .sidebar a { color: #fff; text-decoration: none; padding: 10px 15px; display: block; }
-        .sidebar a:hover { background-color: #495057; }
-        .content { padding: 20px; }
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --sidebar-bg: #0f172a;
+            --sidebar-hover: #1e293b;
+            --body-bg: #f8fafc;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--body-bg);
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar { 
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            z-index: 1000;
+            transition: var(--transition);
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header i {
+            font-size: 1.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-nav {
+            padding: 0 1rem;
+        }
+
+        .sidebar a { 
+            color: #94a3b8; 
+            text-decoration: none; 
+            padding: 0.875rem 1rem; 
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .sidebar a i { font-size: 1.2rem; }
+
+        .sidebar a:hover, .sidebar a.active { 
+            background-color: var(--sidebar-hover);
+            color: white;
+        }
+
+        .sidebar a.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Content Area */
+        .main-content { 
+            margin-left: 260px;
+            padding: 2rem;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* Navbar Styling */
+        .top-nav {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 2rem;
+            margin-left: 260px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        /* Card Styling */
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .alert {
+            border-radius: 16px;
+            border: none;
+            box-shadow: var(--card-shadow);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 992px) {
+            .sidebar { left: -260px; }
+            .sidebar.active { left: 0; }
+            .main-content, .top-nav { margin-left: 0; }
+        }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('web.dashboard') }}">School Management</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                {% if session.get('user') %}
-                <li class="nav-item">
-                    <span class="nav-link text-light">Welcome, {{ session.user }}</span>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="{{ url_for('web.logout') }}">Logout</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
+{% if session.get('user') %}
+<div class="sidebar">
+    <div class="sidebar-header">
+        <i class="bi bi-mortarboard-fill"></i>
+        <span>EduManager <span class="fw-light">Pro</span></span>
     </div>
-</nav>
-
-<div class="container-fluid">
-    <div class="row">
-        {% if session.get('user') %}
-        <div class="col-md-2 sidebar p-0">
-            <a href="{{ url_for('web.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
-            <a href="{{ url_for('web.students') }}"><i class="bi bi-people"></i> Students</a>
-            <a href="{{ url_for('web.teachers') }}"><i class="bi bi-person-badge"></i> Teachers</a>
-            <a href="{{ url_for('web.attendance') }}"><i class="bi bi-calendar-check"></i> Attendance</a>
-            <a href="{{ url_for('web.fees') }}"><i class="bi bi-cash-coin"></i> Fees</a>
-        </div>
-        <div class="col-md-10 content">
-        {% else %}
-        <div class="col-md-12 content">
-        {% endif %}
-            
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-
-            {% block content %}{% endblock %}
-        </div>
+    <div class="sidebar-nav">
+        <a href="{{ url_for('web.dashboard') }}" class="{{ 'active' if request.endpoint == 'web.dashboard' }}">
+            <i class="bi bi-grid-1x2-fill"></i> Dashboard
+        </a>
+        <a href="{{ url_for('web.students') }}" class="{{ 'active' if request.endpoint == 'web.students' }}">
+            <i class="bi bi-people-fill"></i> Students
+        </a>
+        <a href="{{ url_for('web.teachers') }}" class="{{ 'active' if request.endpoint == 'web.teachers' }}">
+            <i class="bi bi-person-badge-fill"></i> Teachers
+        </a>
+        <a href="{{ url_for('web.attendance') }}" class="{{ 'active' if request.endpoint == 'web.attendance' }}">
+            <i class="bi bi-calendar-check-fill"></i> Attendance
+        </a>
+        <a href="{{ url_for('web.fees') }}" class="{{ 'active' if request.endpoint == 'web.fees' }}">
+            <i class="bi bi-cash-stack"></i> Fees
+        </a>
     </div>
+</div>
+
+<div class="top-nav">
+    <div class="d-flex align-items-center gap-3">
+        <span class="text-muted small">Welcome back,</span>
+        <span class="fw-bold">{{ session.user }}</span>
+        <a class="btn btn-outline-danger btn-sm rounded-pill px-3" href="{{ url_for('web.logout') }}">Logout</a>
+    </div>
+</div>
+{% endif %}
+
+<div class="{{ 'main-content' if session.get('user') else 'container pt-5' }}">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'info' if category == 'message' else category }} alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

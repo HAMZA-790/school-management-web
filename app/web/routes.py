@@ -22,7 +22,7 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if AuthService.authenticate(username, password):
+        if AuthService.login(username, password)[0]:
             session['user'] = username
             return redirect(url_for('web.dashboard'))
         else:
@@ -38,9 +38,16 @@ def logout():
 @web_bp.route('/dashboard')
 @login_required
 def dashboard():
+    from datetime import datetime
     total_students = StudentService.get_total_students()
     total_teachers = TeacherService.get_total_teachers()
-    return render_template('dashboard.html', total_students=total_students, total_teachers=total_teachers)
+    total_fees = FeeService.get_total_fees()
+    now = datetime.now().strftime('%B %d, %Y')
+    return render_template('dashboard.html', 
+                         total_students=total_students, 
+                         total_teachers=total_teachers, 
+                         total_fees=total_fees,
+                         now=now)
 
 # Students Routes
 @web_bp.route('/students', methods=['GET', 'POST'])
@@ -108,7 +115,7 @@ def attendance():
         flash(msg, 'success' if success else 'danger')
         return redirect(url_for('web.attendance'))
         
-    records = AttendanceService.get_all_attendance()
+    records = AttendanceService.get_attendance()
     students = StudentService.get_all_students()
     return render_template('attendance.html', records=records, students=students)
 
@@ -124,6 +131,6 @@ def fees():
         flash(msg, 'success' if success else 'danger')
         return redirect(url_for('web.fees'))
         
-    records = FeeService.get_all_fees()
+    records = FeeService.get_fees()
     students = StudentService.get_all_students()
     return render_template('fees.html', records=records, students=students)

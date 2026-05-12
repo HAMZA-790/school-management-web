@@ -5,3 +5,5 @@ env/
 .pytest_cache/
 logs/
 .git/
+*.zip
+*.tar

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: school-management-web
+  labels:
+    app: school-management-web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: school-management-web
+  template:
+    metadata:
+      labels:
+        app: school-management-web
+    spec:
+      containers:
+      - name: school-management-web
+        image: school-management-web:latest
+        imagePullPolicy: IfNotPresent   # Use local image (Minikube)
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLASK_APP
+          value: "web_app.py"
+        - name: DB_TYPE
+          value: "sqlite"
+        - name: FLASK_ENV
+          value: "production"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10

@@ -1,25 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-4">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white text-center">
-                <h4>Login</h4>
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="card border-0 shadow-lg" style="border-radius: 30px; overflow: hidden;">
+            <div class="card-header border-0 text-center py-5" style="background: var(--primary-gradient);">
+                <i class="bi bi-mortarboard-fill text-white display-4 mb-3 d-block"></i>
+                <h3 class="text-white fw-bold mb-0">Welcome Back</h3>
+                <p class="text-white-50 small">Log in to manage your school</p>
             </div>
-            <div class="card-body">
+            <div class="card-body p-5">
                 <form method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input type="text" name="username" class="form-control" required>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold small text-muted text-uppercase tracking-wider">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i class="bi bi-person text-primary"></i></span>
+                            <input type="text" name="username" class="form-control bg-light border-0 shadow-none" placeholder="Enter username" required style="border-radius: 0 12px 12px 0; padding: 0.75rem;">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" required>
+                    <div class="mb-5">
+                        <label class="form-label fw-semibold small text-muted text-uppercase tracking-wider">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i class="bi bi-lock text-primary"></i></span>
+                            <input type="password" name="password" class="form-control bg-light border-0 shadow-none" placeholder="Enter password" required style="border-radius: 0 12px 12px 0; padding: 0.75rem;">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <button type="submit" class="btn btn-primary w-100 py-3 shadow-sm">
+                        Access Dashboard <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
