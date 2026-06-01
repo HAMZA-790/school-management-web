@@ -1,3 +1,4 @@
+import re
 from app.utils.db import get_db_connection
 from app.models.student_model import Student
 from app.utils.logger import logger
@@ -7,8 +8,13 @@ class StudentService:
     def add_student(name, student_class, age):
         if not name or len(str(name).strip()) < 2:
             return False, "Validation Error: Name must be at least 2 characters long."
+        if not re.match(r"^[a-zA-Z\s.]+$", str(name)):
+            return False, "Validation Error: Name can only contain letters, spaces, and dots."
+            
         if not student_class or not str(student_class).strip():
             return False, "Validation Error: Class cannot be empty."
+        if not re.match(r"^[a-zA-Z0-9\s\-]+$", str(student_class)):
+            return False, "Validation Error: Class contains invalid characters."
         try:
             age = int(age)
             if age < 3 or age > 100:
@@ -49,8 +55,13 @@ class StudentService:
     def update_student(student_id, name, student_class, age):
         if not name or len(str(name).strip()) < 2:
             return False, "Validation Error: Name must be at least 2 characters long."
+        if not re.match(r"^[a-zA-Z\s.]+$", str(name)):
+            return False, "Validation Error: Name can only contain letters, spaces, and dots."
+            
         if not student_class or not str(student_class).strip():
             return False, "Validation Error: Class cannot be empty."
+        if not re.match(r"^[a-zA-Z0-9\s\-]+$", str(student_class)):
+            return False, "Validation Error: Class contains invalid characters."
         try:
             age = int(age)
             if age < 3 or age > 100:

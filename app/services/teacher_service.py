@@ -1,3 +1,4 @@
+import re
 from app.utils.db import get_db_connection
 from app.models.teacher_model import Teacher
 from app.utils.logger import logger
@@ -7,8 +8,13 @@ class TeacherService:
     def add_teacher(name, subject):
         if not name or len(str(name).strip()) < 2:
             return False, "Validation Error: Teacher name must be at least 2 characters long."
+        if not re.match(r"^[a-zA-Z\s.]+$", str(name)):
+            return False, "Validation Error: Name can only contain letters, spaces, and dots."
+        
         if not subject or not str(subject).strip():
             return False, "Validation Error: Subject cannot be empty."
+        if not re.match(r"^[a-zA-Z0-9\s\-.]+$", str(subject)):
+            return False, "Validation Error: Subject contains invalid characters."
 
         try:
             conn = get_db_connection()
@@ -43,8 +49,13 @@ class TeacherService:
     def update_teacher(teacher_id, name, subject):
         if not name or len(str(name).strip()) < 2:
             return False, "Validation Error: Teacher name must be at least 2 characters long."
+        if not re.match(r"^[a-zA-Z\s.]+$", str(name)):
+            return False, "Validation Error: Name can only contain letters, spaces, and dots."
+            
         if not subject or not str(subject).strip():
             return False, "Validation Error: Subject cannot be empty."
+        if not re.match(r"^[a-zA-Z0-9\s\-.]+$", str(subject)):
+            return False, "Validation Error: Subject contains invalid characters."
 
         try:
             conn = get_db_connection()
