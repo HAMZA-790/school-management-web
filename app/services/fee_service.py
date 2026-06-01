@@ -1,9 +1,27 @@
+from datetime import datetime
 from app.utils.db import get_db_connection
 from app.utils.logger import logger
 
 class FeeService:
     @staticmethod
     def add_fee(student_id, amount, date):
+        try:
+            student_id = int(student_id)
+        except ValueError:
+            return False, "Validation Error: Student ID must be an integer."
+
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                return False, "Validation Error: Fee amount must be greater than 0."
+        except ValueError:
+            return False, "Validation Error: Fee amount must be a valid number."
+
+        try:
+            datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            return False, "Validation Error: Invalid date format. Use YYYY-MM-DD."
+
         try:
             conn = get_db_connection()
             if not conn: return False, "DB Connection Error"

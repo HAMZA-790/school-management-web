@@ -5,6 +5,11 @@ from app.utils.logger import logger
 class TeacherService:
     @staticmethod
     def add_teacher(name, subject):
+        if not name or len(str(name).strip()) < 2:
+            return False, "Validation Error: Teacher name must be at least 2 characters long."
+        if not subject or not str(subject).strip():
+            return False, "Validation Error: Subject cannot be empty."
+
         try:
             conn = get_db_connection()
             if not conn: return False, "DB Connection Error"
@@ -36,6 +41,11 @@ class TeacherService:
 
     @staticmethod
     def update_teacher(teacher_id, name, subject):
+        if not name or len(str(name).strip()) < 2:
+            return False, "Validation Error: Teacher name must be at least 2 characters long."
+        if not subject or not str(subject).strip():
+            return False, "Validation Error: Subject cannot be empty."
+
         try:
             conn = get_db_connection()
             if not conn: return False, "DB Connection Error"

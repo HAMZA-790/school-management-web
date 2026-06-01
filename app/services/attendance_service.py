@@ -1,9 +1,25 @@
+from datetime import datetime
 from app.utils.db import get_db_connection
 from app.utils.logger import logger
 
 class AttendanceService:
     @staticmethod
     def mark_attendance(student_id, date, status):
+        try:
+            student_id = int(student_id)
+        except ValueError:
+            return False, "Validation Error: Student ID must be an integer."
+
+        try:
+            attendance_date = datetime.strptime(date, '%Y-%m-%d').date()
+            if attendance_date > datetime.now().date():
+                return False, "Validation Error: Attendance date cannot be in the future."
+        except ValueError:
+            return False, "Validation Error: Invalid date format. Use YYYY-MM-DD."
+
+        if status not in ['Present', 'Absent', 'Late']:
+            return False, "Validation Error: Status must be Present, Absent, or Late."
+
         try:
             conn = get_db_connection()
             if not conn: return False, "DB Connection Error"

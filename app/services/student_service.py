@@ -5,6 +5,17 @@ from app.utils.logger import logger
 class StudentService:
     @staticmethod
     def add_student(name, student_class, age):
+        if not name or len(str(name).strip()) < 2:
+            return False, "Validation Error: Name must be at least 2 characters long."
+        if not student_class or not str(student_class).strip():
+            return False, "Validation Error: Class cannot be empty."
+        try:
+            age = int(age)
+            if age < 3 or age > 100:
+                return False, "Validation Error: Age must be between 3 and 100."
+        except ValueError:
+            return False, "Validation Error: Age must be a valid number."
+
         try:
             conn = get_db_connection()
             if not conn: return False, "DB Connection Error"
@@ -36,6 +47,17 @@ class StudentService:
 
     @staticmethod
     def update_student(student_id, name, student_class, age):
+        if not name or len(str(name).strip()) < 2:
+            return False, "Validation Error: Name must be at least 2 characters long."
+        if not student_class or not str(student_class).strip():
+            return False, "Validation Error: Class cannot be empty."
+        try:
+            age = int(age)
+            if age < 3 or age > 100:
+                return False, "Validation Error: Age must be between 3 and 100."
+        except ValueError:
+            return False, "Validation Error: Age must be a valid number."
+
         try:
             conn = get_db_connection()
             if not conn: return False, "DB Connection Error"
